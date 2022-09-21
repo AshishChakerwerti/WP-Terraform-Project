@@ -1,0 +1,8 @@
+.terraform/
+darwin_amd64/
+plan.out
+terraform.tfstate*
+WP-Key.pem
+myhosts
+.DS_Store
+venv/

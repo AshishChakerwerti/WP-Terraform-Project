@@ -1,0 +1,25 @@
+
+server {
+	root {{ wp_install_dir }};
+	index index.html index.htm index.nginx-debian.html index.php;
+	server_name {{ site_name }} www.{{ site_name }} _;
+
+	location / {
+		try_files $uri $uri/ /index.php$is_args$args;
+	}
+	location = /favicon.ico { log_not_found off; access_log off; }
+	location = /robots.txt { log_not_found off; access_log off; allow all; }
+	location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
+		expires max;
+		log_not_found off;
+	}
+	location ~ \.php$ {
+		try_files $uri =404;
+		include /etc/nginx/fastcgi_params;
+		fastcgi_read_timeout 3600s;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		fastcgi_pass unix:/run/php/php{{ php_ver.stdout }}-fpm.sock;
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		fastcgi_index index.php;
+	}
+}
